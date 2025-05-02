@@ -1,0 +1,140 @@
+﻿@model Restaurant.ViewModels.MasterWorkingHourFullPageViewModel
+@{
+    ViewData["Title"] = "Working Hours Full Action";
+}
+<div class="row">
+    <div class="col-12">
+        <form asp-action="Save" id="SaveForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" readonly value="0" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MasterWorkingHoursIdName" class="control-label"></label>
+                <input asp-for="MasterWorkingHoursIdName" class="form-control" />
+                <span asp-validation-for="MasterWorkingHoursIdName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MasterWorkingHoursIdTimeFormTo" class="control-label"></label>
+                <input asp-for="MasterWorkingHoursIdTimeFormTo" class="form-control" />
+                <span asp-validation-for="MasterWorkingHoursIdTimeFormTo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="button" value="Clear" class="btn btn-outline-dark" onclick="ClearForm()" />
+            </div>
+        </form>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.MasterWorkingHoursIdName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MasterWorkingHoursIdTimeFormTo)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.MasterWorkingHoursList)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.MasterWorkingHoursIdName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MasterWorkingHoursIdTimeFormTo)
+                </td>
+
+                <td>
+                    <a class="btn btn-outline-warning" onclick="EditInfo('@item.Id','@item.MasterWorkingHoursIdName','@item.MasterWorkingHoursIdTimeFormTo')">Edit</a> |
+                    @if (item.IsActivate)
+                    {
+                        <form asp-action="ChangeStatus" id="ChangeForm-@item.Id" class="d-inline">
+                            <input type="hidden" asp-for="Id" value="@item.Id" />
+                            <input type="button" value="Deactivate" class="btn btn-outline-warning" onclick="ConfirmChange('@item.Id')" /> |
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-action="ChangeStatus" id="ChangeForm-@item.Id" class="d-inline">
+                            <input type="hidden" asp-for="Id" value="@item.Id" />
+                            <input type="button" value="Activate" class="btn btn-outline-warning" onclick="ConfirmChange('@item.Id')" /> |
+                        </form>
+
+                    }
+
+                    <form asp-action="Delete" id="DeleteForm-@item.Id" class="d-inline">
+                        <input type="hidden" asp-for="Id" value="@item.Id" />
+                        <input type="button" value="Delete" class="btn btn-outline-danger" onclick="ConfirmDelete('@item.Id')" /> |
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function EditInfo(id, Hours, Time) {
+        $("#Id").val(id);
+        $("#MasterWorkingHoursIdName").val(Hours);
+        $("#MasterWorkingHoursIdTimeFormTo").val(Time);
+
+
+    }
+    function ConfirmDelete(id) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $(`#DeleteForm-${id}`).submit();
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success"
+                });
+            }
+        });
+    }
+    function ClearForm() {
+        $("#SaveForm #Id").val(0);
+        $("#MasterWorkingHoursIdName").val('');
+        $("#MasterWorkingHoursIdTimeFormTo").val('');
+    }
+    function ConfirmChange(id) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Change it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $(`#ChangeForm-${id}`).submit();
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been Changed.",
+                    icon: "success"
+                });
+            }
+        });
+
+    }
+</script>

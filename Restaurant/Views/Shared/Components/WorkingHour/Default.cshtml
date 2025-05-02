@@ -1,0 +1,10 @@
+﻿@model Restaurant.ViewModels.ComponentViewModel
+
+@foreach (var item in Model.MasterWorkingHourList)
+{
+    <li>
+        @item.MasterWorkingHoursIdName
+        <span>@item.MasterWorkingHoursIdTimeFormTo</span>
+    </li>
+
+}

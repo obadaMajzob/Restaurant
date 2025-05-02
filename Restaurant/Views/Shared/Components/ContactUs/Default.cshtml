@@ -1,0 +1,15 @@
+﻿@model Restaurant.ViewModels.ContactViewModel
+
+@foreach (var item in Model.MasterContactUsInformationList)
+{
+    <div class="single-footer-cont-info">
+        <div class="cont-info-icon">
+            <i class="@item.MasterContactUsInformationImageUrl"></i>
+        </div>
+        <div class="cont-info-content">
+            <p>@item.MasterContactUsInformationIdesc</p>
+        </div>
+    </div>
+
+
+}

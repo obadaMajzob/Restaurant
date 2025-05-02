@@ -1,0 +1,5 @@
+﻿@model Restaurant.ViewModels.ComponentViewModel
+@foreach (var item in Model.MasterSocialMediaList)
+{
+    <li><a class="@item.MasterSocialMediaUrl" href="#"><i class="@item.MasterSocialMediaImageUrl"></i></a></li>
+}

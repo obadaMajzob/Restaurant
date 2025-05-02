@@ -1,0 +1,146 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model Restaurant.ViewModels.MasterSocialMediumFullViewModel
+@{
+    ViewData["Title"] = "Social Media Full Action";
+}
+<div class="row">
+    <div class="col-12">
+        <form asp-action="Save" id="SaveForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" readonly value="0" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MasterSocialMediaUrl" class="control-label"></label>
+                <input asp-for="MasterSocialMediaUrl" class="form-control" />
+                <span asp-validation-for="MasterSocialMediaUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MasterSocialMediaImageUrl" class="control-label"></label>
+                <input asp-for="MasterSocialMediaImageUrl" class="form-control" />
+                <span asp-validation-for="MasterSocialMediaImageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="button" value="Clear" class="btn btn-outline-dark" onclick="ClearForm()" />
+            </div>
+        </form>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.MasterSocialMediaUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MasterSocialMediaImageUrl)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.MasterSocialMediaList)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.MasterSocialMediaUrl)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MasterSocialMediaImageUrl)
+                </td>
+                <td>
+                    <a class="btn btn-outline-warning" onclick="EditInfo('@item.Id','@item.MasterSocialMediaUrl','@item.MasterSocialMediaImageUrl')">Edit</a> |
+                    @if (item.IsActive)
+                    {
+                        <form asp-action="ChangeStatus" id="ChangeForm-@item.Id" class="d-inline">
+                            <input type="hidden" asp-for="Id" value="@item.Id" />
+                            <input type="button" value="Deactivate" class="btn btn-outline-warning" onclick="ConfirmChange('@item.Id')" /> |
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-action="ChangeStatus" id="ChangeForm-@item.Id" class="d-inline">
+                            <input type="hidden" asp-for="Id" value="@item.Id" />
+                            <input type="button" value="Activate" class="btn btn-outline-warning" onclick="ConfirmChange('@item.Id')" /> |
+                        </form>
+
+                    }
+
+                    <form asp-action="Delete" id="DeleteForm-@item.Id" class="d-inline">
+                        <input type="hidden" asp-for="Id" value="@item.Id" />
+                        <input type="button" value="Delete" class="btn btn-outline-danger" onclick="ConfirmDelete('@item.Id')" /> |
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+    function EditInfo(id, icon,path) {
+        $("#Id").val(id);
+        $("#MasterSocialMediaUrl").val(icon);
+        $("#MasterSocialMediaImageUrl").val(path);
+
+    }
+
+    function ConfirmDelete(id) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $(`#DeleteForm-${id}`).submit();
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success"
+                });
+            }
+        });
+    }
+
+    function ClearForm() {
+        $("#SaveForm #Id").val(0);
+        $("#MasterSocialMediaUrl").val('');
+        $("#MasterSocialMediaImageUrl").val('');
+    }
+
+    function ConfirmChange(id) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Change it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $(`#ChangeForm-${id}`).submit();
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been Changed.",
+                    icon: "success"
+                });
+            }
+        });
+
+    }
+
+</script>
